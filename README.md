@@ -14,6 +14,17 @@ The project uses **Node.js, Express.js, MongoDB Atlas, Mongoose, and Pino**, and
 
 ---
 
+## Technologies Used
+
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- Render
+- GitHub
+- Pino Logger
+- Jest
+
 ## System Architecture
 
 The project is divided into **four independent processes**, each responsible for a specific domain:
