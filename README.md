@@ -43,16 +43,16 @@ Each process runs separately and can be deployed independently.
 ## Deployed Services (Render)
 
 - **Users Service**  
-  https://cost-manager-users-9kun.onrender.com  
+  https://cost-manager-users-sgdp.onrender.com  
 
 - **Costs Service**  
-  https://cost-manager-costs-4b42.onrender.com  
+  https://cost-manager-costs-ptc6.onrender.com  
 
 - **Logs Service**  
-  https://cost-manager-logs-1q12.onrender.com  
+  https://cost-manager-logs-7cgb.onrender.com  
 
 - **Admin Service**  
-  https://cost-manager-admin-ix1s.onrender.com  
+  https://cost-manager-admin-otvg.onrender.com  
 
 ---
 
