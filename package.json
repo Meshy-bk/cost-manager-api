@@ -23,15 +23,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://Adi-Beker@github.com/barak1panker/Final-Project.git"
+    "url": "git+https://github.com/Meshy-bk/cost-manager-api.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/barak1panker/Final-Project/issues"
+    "url": "https://github.com/Meshy-bk/cost-manager-api/issues"
   },
-  "homepage": "https://github.com/barak1panker/Final-Project#readme",
+  "homepage": "https://github.com/Meshy-bk/cost-manager-api#readme",
   "devDependencies": {
     "jest": "^30.2.0",
     "nodemon": "^3.1.11",
