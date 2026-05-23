@@ -3,13 +3,13 @@
 const request = require('supertest');
 
 test('Admin: GET /health returns ok', async function () {
-  const res = await request('https://cost-manager-admin-ix1s.onrender.com').get('/health'); // Call admin health endpoint
+  const res = await request('https://cost-manager-admin-otvg.onrender.com').get('/health'); // Call admin health endpoint
   expect(res.status).toBe(200);
   expect(res.body).toEqual({ ok: true });
 });
 
 test('Admin: GET /api/about returns only first_name and last_name', async function () {
-  const res = await request('https://cost-manager-admin-ix1s.onrender.com').get('/api/about'); // Call about endpoint
+  const res = await request('https://cost-manager-admin-otvg.onrender.com').get('/api/about'); // Call about endpoint
   expect(res.status).toBe(200);
   expect(Array.isArray(res.body)).toBe(true);
 

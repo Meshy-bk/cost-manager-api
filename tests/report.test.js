@@ -3,7 +3,7 @@
 const request = require('supertest');
 
 test('Report: GET /api/report returns report structure', async function () {
-  const res = await request('https://cost-manager-costs-4b42.onrender.com').get('/api/report?id=123123&year=2026&month=1'); // Request monthly report
+  const res = await request('https://cost-manager-costs-ptc6.onrender.com').get('/api/report?id=123123&year=2026&month=1'); // Request monthly report
 
   expect(res.status).toBe(200);
   expect(res.body).toHaveProperty('userid', 123123);
@@ -14,7 +14,7 @@ test('Report: GET /api/report returns report structure', async function () {
 });
 
 test('Report: GET /api/report rejects invalid month', async function () {
-  const res = await request('https://cost-manager-costs-4b42.onrender.com').get('/api/report?id=123123&year=2026&month=13'); // Invalid month
+  const res = await request('https://cost-manager-costs-ptc6.onrender.com').get('/api/report?id=123123&year=2026&month=13'); // Invalid month
 
   expect(res.status).toBe(400);
   expect(res.body).toHaveProperty('id');
