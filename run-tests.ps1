@@ -15,6 +15,8 @@ $ADMIN_BASE = "https://cost-manager-admin-ix1s.onrender.com"
 $DEFAULT_USER_ID = 123123
 
 # ========= HELPERS =========
+
+# Print formatted section titles to improve test output readability
 function Print-Title([string]$t) {
   Write-Host ""
   Write-Host "========================================" -ForegroundColor Cyan
@@ -22,16 +24,19 @@ function Print-Title([string]$t) {
   Write-Host "========================================" -ForegroundColor Cyan
 }
 
+# Convert PowerShell objects into formatted JSON strings
 function Safe-Json([object]$obj, [int]$depth = 20) {
   return ($obj | ConvertTo-Json -Depth $depth)
 }
 
+# Send HTTP GET requests and return parsed JSON responses
 function Invoke-JsonGet([string]$url) {
   Write-Host "GET  $url" -ForegroundColor DarkGray
   $res = Invoke-RestMethod -Method Get -Uri $url
   $res
 }
 
+# Send HTTP POST requests with JSON request bodies
 function Invoke-JsonPost([string]$url, [hashtable]$body) {
   Write-Host "POST $url" -ForegroundColor DarkGray
   Write-Host ("Body: " + (Safe-Json $body)) -ForegroundColor DarkGray
@@ -40,6 +45,7 @@ function Invoke-JsonPost([string]$url, [hashtable]$body) {
   $res
 }
 
+# Execute a request that is expected to fail and print the error details.
 function Invoke-ExpectError([scriptblock]$action) {
   try {
     & $action | Out-Null
@@ -61,6 +67,8 @@ function Invoke-ExpectError([scriptblock]$action) {
 }
 
 # ========= TESTS =========
+
+# Verify that all deployed services are alive and responding.
 function Test-HealthAll {
   Print-Title "1) HEALTH - all services"
   Write-Host (Invoke-JsonGet "$USERS_BASE/health" | Out-String)
@@ -69,26 +77,31 @@ function Test-HealthAll {
   Write-Host (Invoke-JsonGet "$ADMIN_BASE/health" | Out-String)
 }
 
+# Test retrieval of developers information from the Admin service
 function Test-About {
   Print-Title "2) ABOUT - developers team"
   $res = Invoke-JsonGet "$ADMIN_BASE/api/about"
   Write-Host (Safe-Json $res 10)
 }
 
+# Test retrieval of all users from the Users service
 function Test-UsersList {
   Print-Title "3) USERS - list all"
   $res = Invoke-JsonGet "$USERS_BASE/api/users"
   Write-Host (Safe-Json $res 10)
 }
 
+# Test retrieval of a specific user by ID
 function Test-UserDetails {
   Print-Title "4) USERS - details by id"
   $res = Invoke-JsonGet "$USERS_BASE/api/users/$DEFAULT_USER_ID"
   Write-Host (Safe-Json $res 10)
 }
 
+# Test creation of a new random user through the Users service
 function Test-AddUser {
   Print-Title "5) USERS - add user (POST /api/add)"
+   # Generate a random ID to avoid duplicate-user errors
   $newId = Get-Random -Minimum 200000 -Maximum 999999
   $body = @{
     id = $newId
@@ -100,6 +113,7 @@ function Test-AddUser {
   Write-Host (Safe-Json $res 10)
 }
 
+# Test adding a regular cost item for the default user
 function Test-AddCost {
   Print-Title "6) COSTS - add cost (POST /api/add)"
   $body = @{
@@ -112,6 +126,7 @@ function Test-AddCost {
   Write-Host (Safe-Json $res 10)
 }
 
+# Test adding a future cost item, which should be allowed by the API
 function Test-AddCostFuture {
   Print-Title "7) COSTS - add FUTURE cost (allowed)"
   $future = (Get-Date).ToUniversalTime().AddDays(7).ToString("yyyy-MM-ddTHH:mm:ssZ")
@@ -126,6 +141,7 @@ function Test-AddCostFuture {
   Write-Host (Safe-Json $res 10)
 }
 
+# Test adding a past cost item, which should be rejected by validation
 function Test-AddCostPastShouldFail {
   Print-Title "8) COSTS - add PAST cost (should fail 400)"
   $body = @{
@@ -138,6 +154,7 @@ function Test-AddCostPastShouldFail {
   Invoke-ExpectError { Invoke-JsonPost "$COSTS_BASE/api/add" $body }
 }
 
+# Test validation for an unsupported cost category
 function Test-AddCostBadCategoryShouldFail {
   Print-Title "9) COSTS - invalid category (should fail 400)"
   $body = @{
@@ -149,6 +166,7 @@ function Test-AddCostBadCategoryShouldFail {
   Invoke-ExpectError { Invoke-JsonPost "$COSTS_BASE/api/add" $body }
 }
 
+# Test monthly report generation for the current month and year
 function Test-ReportThisMonth {
   Print-Title "10) COSTS - monthly report"
   $year = (Get-Date).Year
@@ -158,12 +176,14 @@ function Test-ReportThisMonth {
   Write-Host (Safe-Json $res 20)
 }
 
+# Test retrieval of all request logs from the Logs service
 function Test-Logs {
   Print-Title "11) LOGS - list"
   $res = Invoke-JsonGet "$LOGS_BASE/api/logs"
   Write-Host (Safe-Json $res 20)
 }
 
+# Run the main end-to-end flow across all deployed services
 function Test-AllMainFlow {
   Print-Title "12) FULL FLOW (health -> about -> users -> add cost -> report -> logs)"
   Test-HealthAll
@@ -176,6 +196,7 @@ function Test-AllMainFlow {
 }
 
 # ========= MENU =========
+# Print the interactive menu options for the test runner
 function Show-Menu {
   Write-Host ""
   Write-Host "Cost Manager - Test Menu" -ForegroundColor Cyan
@@ -198,6 +219,7 @@ function Show-Menu {
 while ($true) {
   Show-Menu
   $choice = Read-Host "Choose a number"
+  # Execute the selected test according to the user's menu choice
   switch ($choice) {
     "1"  { Test-HealthAll }
     "2"  { Test-About }
