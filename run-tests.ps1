@@ -6,11 +6,10 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 # ========= CONFIG =========
-$USERS_BASE = "https://cost-manager-users-9kun.onrender.com"
-$COSTS_BASE = "https://cost-manager-costs-4b42.onrender.com"
-$LOGS_BASE  = "https://cost-manager-logs-1q12.onrender.com"
-$ADMIN_BASE = "https://cost-manager-admin-ix1s.onrender.com"
-
+$USERS_BASE = "https://cost-manager-users-sgdp.onrender.com"
+$COSTS_BASE = "https://cost-manager-costs-ptc6.onrender.com"
+$LOGS_BASE  = "https://cost-manager-logs-7cgb.onrender.com"
+$ADMIN_BASE = "https://cost-manager-admin-otvg.onrender.com"
 # User used by submission guideline
 $DEFAULT_USER_ID = 123123
 
