@@ -13,10 +13,18 @@ filename = input("filename=")
 # c = costs service
 # d = admin service
 
-a = "http://localhost:2003"
-b = "http://localhost:2001"
-c = "http://localhost:2002"
-d = "http://localhost:2004"
+# ===== LOCAL TEST =====
+# a = "http://localhost:2003"
+# b = "http://localhost:2001"
+# c = "http://localhost:2002"
+# d = "http://localhost:2004"
+
+# ===== CLOUD TEST =====
+a = "https://cost-manager-logs-7cgb.onrender.com"
+b = "https://cost-manager-users-sgdp.onrender.com"
+c = "https://cost-manager-costs-ptc6.onrender.com"
+d = "https://cost-manager-admin-otvg.onrender.com"
+
 
 # Redirect output to file
 output = open(filename, "w", encoding="utf-8")

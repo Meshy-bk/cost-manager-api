@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 
+// Define MongoDB schema for cached monthly reports
 const ReportCacheSchema = new mongoose.Schema(
   {
     userid: { type: Number, required: true }, // User id for this cached report

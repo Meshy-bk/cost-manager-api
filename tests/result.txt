@@ -1,0 +1,57 @@
+a=https://cost-manager-logs-7cgb.onrender.com
+b=https://cost-manager-users-sgdp.onrender.com
+c=https://cost-manager-costs-ptc6.onrender.com
+d=https://cost-manager-admin-otvg.onrender.com
+
+==============================
+TESTING ADMIN /api/about
+==============================
+url=https://cost-manager-admin-otvg.onrender.com/api/about
+status_code=200
+content=b'[{"first_name":"Meshy","last_name":"Bukris"},{"first_name":"Shaked","last_name":"Shlomo"}]'
+text=[{"first_name":"Meshy","last_name":"Bukris"},{"first_name":"Shaked","last_name":"Shlomo"}]
+json=[{'first_name': 'Meshy', 'last_name': 'Bukris'}, {'first_name': 'Shaked', 'last_name': 'Shlomo'}]
+
+==============================
+TESTING REPORT - BEFORE ADD
+==============================
+url=https://cost-manager-costs-ptc6.onrender.com/api/report?id=123123&year=2026&month=5
+status_code=200
+content=b'{"userid":123123,"year":2026,"month":5,"costs":[{"food":[{"sum":50,"description":"pizza","day":22},{"sum":50,"description":"pizza","day":23},{"sum":1,"description":"test cost","day":23}]},{"health":[]},{"housing":[]},{"sports":[]},{"education":[]}]}'
+text={"userid":123123,"year":2026,"month":5,"costs":[{"food":[{"sum":50,"description":"pizza","day":22},{"sum":50,"description":"pizza","day":23},{"sum":1,"description":"test cost","day":23}]},{"health":[]},{"housing":[]},{"sports":[]},{"education":[]}]}
+
+==============================
+TESTING ADD COST
+==============================
+url=https://cost-manager-costs-ptc6.onrender.com/api/add
+status_code=200
+content=b'{"description":"milk 9","category":"food","userid":123123,"sum":8}'
+text={"description":"milk 9","category":"food","userid":123123,"sum":8}
+
+==============================
+TESTING REPORT - AFTER ADD
+==============================
+url=https://cost-manager-costs-ptc6.onrender.com/api/report?id=123123&year=2026&month=5
+status_code=200
+content=b'{"userid":123123,"year":2026,"month":5,"costs":[{"food":[{"sum":50,"description":"pizza","day":22},{"sum":50,"description":"pizza","day":23},{"sum":1,"description":"test cost","day":23},{"sum":8,"description":"milk 9","day":28}]},{"health":[]},{"housing":[]},{"sports":[]},{"education":[]}]}'
+text={"userid":123123,"year":2026,"month":5,"costs":[{"food":[{"sum":50,"description":"pizza","day":22},{"sum":50,"description":"pizza","day":23},{"sum":1,"description":"test cost","day":23},{"sum":8,"description":"milk 9","day":28}]},{"health":[]},{"housing":[]},{"sports":[]},{"education":[]}]}
+
+==============================
+TESTING USERS
+==============================
+url=https://cost-manager-users-sgdp.onrender.com/api/users/123123
+status_code=200
+content=b'{"first_name":"mosh","last_name":"israeli","id":123123,"total":109}'
+text={"first_name":"mosh","last_name":"israeli","id":123123,"total":109}
+
+==============================
+TESTING LOGS
+==============================
+url=https://cost-manager-logs-7cgb.onrender.com/api/logs
+status_code=200
+content=b'[{"time":"2026-05-28T10:57:49.695Z","level":"info","process":"users","method":"GET","path":"/api/users/123123","endpoint":"GET /api/users/:id","message":"endpoint accessed"},{"time":"2026-05-28T10:57:49.535Z","level":"info","process":"users","method":"GET","path":"/api/users/123123","endpoint":"requ'
+text=[{"time":"2026-05-28T10:57:49.695Z","level":"info","process":"users","method":"GET","path":"/api/users/123123","endpoint":"GET /api/users/:id","message":"endpoint accessed"},{"time":"2026-05-28T10:57:49.535Z","level":"info","process":"users","method":"GET","path":"/api/users/123123","endpoint":"requ
+
+==============================
+ALL TESTS FINISHED
+==============================

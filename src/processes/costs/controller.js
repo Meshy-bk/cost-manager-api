@@ -1,11 +1,16 @@
 'use strict';
 
+// Import MongoDB models
 const Cost = require('./models/cost.model');
 const ReportCache = require('./models/reportcache.model');
+
+// Import shared logging utility
 const { logEndpointAccess } = require('../../shared/utils/endpointlog');
 
+// Supported cost categories
 const CATEGORIES = ['food', 'health', 'housing', 'sports', 'education'];
 
+// Build an empty report structure grouped by categories
 function buildEmptyCostsByCategory() {
   return {
     food: [],
@@ -43,6 +48,7 @@ async function addCost(req, res, next) {
 
     const body = req.body || {};
 
+    // Extract request body fields
     const description = body.description;
     const category = body.category;
     const userid = Number(body.userid);
@@ -56,6 +62,7 @@ async function addCost(req, res, next) {
       throw err;
     }
 
+    // Validate category field
     if (typeof category !== 'string' || category.trim().length === 0) {
       const err = new Error('category is required');
       err.id = 11;
@@ -63,6 +70,7 @@ async function addCost(req, res, next) {
       throw err;
     }
 
+    // Validate that category is supported
     if (!CATEGORIES.includes(category.trim())) {
       const err = new Error('category must be one of: food, health, housing, sports, education');
       err.id = 16;
@@ -70,6 +78,7 @@ async function addCost(req, res, next) {
       throw err;
     }
 
+    // Validate user id
     if (!Number.isFinite(userid)) {
       const err = new Error('userid must be a number');
       err.id = 12;
@@ -77,6 +86,7 @@ async function addCost(req, res, next) {
       throw err;
     }
 
+    // Validate cost sum
     if (!Number.isFinite(sum) || sum < 0) {
       const err = new Error('sum must be a non-negative number');
       err.id = 13;
@@ -84,6 +94,7 @@ async function addCost(req, res, next) {
       throw err;
     }
 
+    // Validate optional date field
     const parsedDate = parseOptionalDate(body.date);
 
     if (parsedDate === 'invalid') {
@@ -104,6 +115,7 @@ async function addCost(req, res, next) {
       }
     }
 
+    // Build cost document before saving to MongoDB
     const doc = {
       description: description.trim(),
       category: category.trim(),
@@ -117,6 +129,19 @@ async function addCost(req, res, next) {
       doc.updatedAt = parsedDate;
     }
 
+    // Check that the user exists before adding the cost item
+    const usersServiceUrl = process.env.USERS_SERVICE_URL;
+
+    const userResponse = await fetch(`${usersServiceUrl}/api/users/${userid}`);
+
+    if (!userResponse.ok) {
+      const err = new Error('user does not exist');
+      err.id = 17;
+      err.status = 400;
+      throw err;
+    }
+
+    // Save the new cost item into the database
     const created = await Cost.create(doc);
 
     res.json({
@@ -146,6 +171,7 @@ async function getMonthlyReport(req, res, next) {
       throw err;
     }
 
+    // Validate requested year
     if (!Number.isFinite(year) || year < 1970 || year > 3000) {
       const err = new Error('year must be a valid year');
       err.id = 21;
@@ -153,6 +179,7 @@ async function getMonthlyReport(req, res, next) {
       throw err;
     }
 
+    // Validate requested month
     if (!Number.isFinite(month) || month < 1 || month > 12) {
       const err = new Error('month must be between 1 and 12');
       err.id = 22;
@@ -160,7 +187,8 @@ async function getMonthlyReport(req, res, next) {
       throw err;
     }
 
-    const shouldUseCache = isPastMonth(year, month); // Cache only for past months
+    // Reports for past months are cached in MongoDB to avoid recalculation
+    const shouldUseCache = isPastMonth(year, month); 
 
     // Try to return cached report first (for past months)
     if (shouldUseCache) {
@@ -178,6 +206,7 @@ async function getMonthlyReport(req, res, next) {
     const start = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0));
     const end = new Date(Date.UTC(year, month, 1, 0, 0, 0));
 
+    // Query all costs for the requested user and month
     const costs = await Cost.find(
       {
         userid: userid,
@@ -209,6 +238,7 @@ async function getMonthlyReport(req, res, next) {
       costsArray.push(obj);
     }
 
+    // Build final report object
     const report = {
       userid: userid,
       year: year,
@@ -225,12 +255,14 @@ async function getMonthlyReport(req, res, next) {
       );
     }
 
+    // Return the generated monthly report
     res.json(report);
   } catch (err) {
     next(err);
   }
 }
 
+// Export controller functions for routing
 module.exports = {
   addCost: addCost,
   getMonthlyReport: getMonthlyReport

@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 
+// Define MongoDB schema for cost items
 const CostSchema = new mongoose.Schema(
   {
     description: { type: String, required: true, trim: true }, // Cost description

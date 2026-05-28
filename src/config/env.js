@@ -2,6 +2,8 @@
 
 require('dotenv').config(); // Load variables from .env into process.env
 
+// Retrieve a required environment variable.
+// Throw an error if the variable does not exist.
 function mustGet(name) {
   const value = process.env[name];
 
