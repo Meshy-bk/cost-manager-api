@@ -12,7 +12,7 @@ const CostSchema = new mongoose.Schema(
       enum: ['food', 'health', 'housing', 'sports', 'education'] // Allowed categories
     },
     userid: { type: Number, required: true }, // User id who owns this cost
-    sum: { type: Number, required: true, min: 0 } // Cost amount (must be >= 0)
+    sum: { type: mongoose.Schema.Types.Double, required: true, min: 0 } // Cost amount, stored as a BSON Double (must be >= 0)
   },
   {
     collection: 'costs', // MongoDB collection name

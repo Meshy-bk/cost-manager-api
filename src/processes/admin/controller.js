@@ -1,6 +1,6 @@
 'use strict';
 
-const { logEndpointAccess } = require('../../shared/utils/endpointlog');
+const { logEndpointAccess } = require('../../shared/utils/endpoint-logger');
 
 async function getAbout(req, res, next) {
   try {
