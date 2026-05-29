@@ -2,10 +2,10 @@
 
 // Import MongoDB models
 const Cost = require('./models/cost.model');
-const ReportCache = require('./models/reportcache.model');
+const ReportCache = require('./models/report-cache.model');
 
 // Import shared logging utility
-const { logEndpointAccess } = require('../../shared/utils/endpointlog');
+const { logEndpointAccess } = require('../../shared/utils/endpoint-logger');
 
 // Supported cost categories
 const CATEGORIES = ['food', 'health', 'housing', 'sports', 'education'];
@@ -155,6 +155,16 @@ async function addCost(req, res, next) {
   }
 }
 
+/*
+ * Computed Design Pattern (monthly report)
+ * ----------------------------------------
+ * A report for a month that has already passed can never change, because the
+ * server does not allow adding costs with a past date. So the first time such a
+ * report is requested we build it from the costs collection and SAVE it in the
+ * report_cache collection. Every later request for that same past month returns
+ * the saved (pre-computed) report instead of recalculating it. Reports for the
+ * current or future months are always built live and are never cached.
+ */
 async function getMonthlyReport(req, res, next) {
   try {
     await logEndpointAccess(req, 'costs', 'GET /api/report'); // Save endpoint access log

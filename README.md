@@ -135,6 +135,21 @@ Reports for the current or future months are always generated dynamically.
 
 ---
 
+## How to Run
+
+1. Install dependencies: `npm install`
+2. Create a `.env` file (use `.env.example` as a template)
+3. Start each process in its own terminal:
+
+```bash
+npm run start:users   # port 2001
+npm run start:costs   # port 2002
+npm run start:logs    # port 2003
+npm run start:admin   # port 2004
+```
+
+---
+
 ## Testing
 
 Unit tests were written for all endpoints using **Jest**.

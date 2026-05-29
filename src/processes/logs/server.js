@@ -1,6 +1,6 @@
 'use strict';
 
-const { connectMongo } = require('../../config/mongo');
+const { connectMongo } = require('../../config/database');
 const { mustGet } = require('../../config/env');
 const logger = require('../../config/logger');
 const { buildApp } = require('./app');

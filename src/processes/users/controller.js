@@ -2,7 +2,7 @@
 
 const User = require('./models/user.model');
 const Cost = require('../costs/models/cost.model');
-const { logEndpointAccess } = require('../../shared/utils/endpointlog');
+const { logEndpointAccess } = require('../../shared/utils/endpoint-logger');
 
 async function getAllUsers(req, res, next) {
   try {
