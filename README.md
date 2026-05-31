@@ -105,16 +105,47 @@ Reports for the current or future months are always generated dynamically.
   Returns user details and total costs
 
 - **POST /api/add**  
-  Adds a new user
+  Adds a new user. Send a JSON body (`Content-Type: application/json`) with:
+
+  | Field | Type | Required | Notes |
+  |-------|------|----------|-------|
+  | `id` | Number | yes | Unique user id |
+  | `first_name` | String | yes | |
+  | `last_name` | String | yes | |
+  | `birthday` | String (date) | yes | Any valid date, e.g. `1990-01-01` |
+
+  ```json
+  {
+    "id": 123123,
+    "first_name": "mosh",
+    "last_name": "israeli",
+    "birthday": "1990-01-01"
+  }
+  ```
 
 ---
 
 ### Costs Service
 
 - **POST /api/add**  
-  Adds a new cost item  
-  - Future dates are allowed  
-  - Past dates are rejected  
+  Adds a new cost item. Send a JSON body (`Content-Type: application/json`) with:
+
+  | Field | Type | Required | Notes |
+  |-------|------|----------|-------|
+  | `description` | String | yes | |
+  | `category` | String | yes | One of: `food`, `health`, `housing`, `sports`, `education` |
+  | `userid` | Number | yes | Must be an existing user id |
+  | `sum` | Number | yes | Must be `>= 0` |
+  | `date` | String (date) | no | Defaults to now; future dates are allowed, past dates are rejected |
+
+  ```json
+  {
+    "description": "milk",
+    "category": "food",
+    "userid": 123123,
+    "sum": 8
+  }
+  ```
 
 - **GET /api/report?id=USER_ID&year=YYYY&month=MM**  
   Returns a monthly cost report grouped by categories
