@@ -137,32 +137,49 @@ Reports for the current or future months are always generated dynamically.
 
 ## How to Run
 
+There are two ways to use the project: run the four services yourself, or call the services that are already deployed on Render.
+
+### Option A — Run Locally
+
 1. Install dependencies: `npm install`
-2. Create a `.env` file (use `.env.example` as a template)
+2. Create a `.env` file (use `.env.example` as a template). For a fully local run, set `USERS_SERVICE_URL=http://localhost:2001` so the Costs service verifies users against your local Users service (not the deployed one).
 3. Start each process in its own terminal:
 
 ```bash
-npm run start:users   # port 2001
-npm run start:costs   # port 2002
-npm run start:logs    # port 2003
-npm run start:admin   # port 2004
+npm run start:users   # http://localhost:2001
+npm run start:costs   # http://localhost:2002
+npm run start:logs    # http://localhost:2003
+npm run start:admin   # http://localhost:2004
 ```
+
+The services are now reachable at `http://localhost:PORT`.
+
+### Option B — Use the Deployed Backend (Render)
+
+The four services are already deployed (see [Deployed Services](#deployed-services-render) above), so no local setup is needed — just send HTTP requests to the Render URLs.
+
+> Note: free Render instances sleep after ~15 minutes of inactivity. The first request after a sleep can take 30–50 seconds while the service wakes up. Hit each `/health` endpoint first to wake all four before testing.
 
 ---
 
 ## Testing
 
-Unit tests were written for all endpoints using **Jest**.
-
-The tests verify:
-- Endpoint accessibility
+Unit tests were written for all endpoints using **Jest** (with `supertest`). They verify:
+- Endpoint accessibility (`/health`)
 - Basic request/response structure
-- Validation handling
+- Validation handling (error responses)
 
-Tests are included in the project and are intended for code review purposes.
-
-To run tests locally:
+Run the Jest suite:
 
 ```bash
 npm test
+```
+
+A Python end-to-end tester is also included at `tests/test.py`. It walks the full flow (about → report → add cost → report → user → logs):
+
+```bash
+python3 tests/test.py
+```
+
+Both test sets target the **deployed Render services** by default. To point them at a local run instead, switch the base URLs to `http://localhost:PORT` (the local URLs are present as a commented-out block in `tests/test.py`).
 
