@@ -2,13 +2,13 @@
 
 // Import MongoDB models
 const Cost = require('./models/cost.model');
-const ReportCache = require('./models/report-cache.model');
+const ReportCache = require('./models/report_cache.model');
 
 // Import shared logging utility
-const { logEndpointAccess } = require('../../shared/utils/endpoint-logger');
+const { logEndpointAccess } = require('../../shared/utils/endpoint_logger');
 
 // Supported cost categories
-const CATEGORIES = ['food', 'health', 'housing', 'sports', 'education'];
+const categories = ['food', 'health', 'housing', 'sports', 'education'];
 
 // Build an empty report structure grouped by categories
 function buildEmptyCostsByCategory() {
@@ -71,7 +71,7 @@ async function addCost(req, res, next) {
     }
 
     // Validate that category is supported
-    if (!CATEGORIES.includes(category.trim())) {
+    if (!categories.includes(category.trim())) {
       const err = new Error('category must be one of: food, health, housing, sports, education');
       err.id = 16;
       err.status = 400;
@@ -242,7 +242,7 @@ async function getMonthlyReport(req, res, next) {
 
     // Convert grouped object into the required array format
     const costsArray = [];
-    for (const cat of CATEGORIES) {
+    for (const cat of categories) {
       const obj = {};
       obj[cat] = grouped[cat];
       costsArray.push(obj);
