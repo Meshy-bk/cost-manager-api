@@ -1,7 +1,7 @@
 'use strict';
 
 const logger = require('../../config/logger');
-const { writeDbLog } = require('../utils/database-logger');
+const { writeDbLog } = require('../utils/database_logger');
 
 function requestLogMiddleware(processName) {
   return async function (req, res, next) {

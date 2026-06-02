@@ -1,7 +1,7 @@
 'use strict';
 
 const Log = require('./models/log.model');
-const { logEndpointAccess } = require('../../shared/utils/endpoint-logger');
+const { logEndpointAccess } = require('../../shared/utils/endpoint_logger');
 
 async function getAllLogs(req, res, next) {
   try {

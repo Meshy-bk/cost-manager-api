@@ -3,3 +3,4 @@ node_modules
 .venv
 scripts/setup-db.js
 api-guide.html
+.DS_Store
